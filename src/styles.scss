@@ -1,0 +1,14 @@
+:root {
+  --color-black: #121212;
+  --color-light-black: #1b1b1b;
+  --color-white: #ffffff;
+  --color-orange: #ff9b33;
+  --color-dark-orange: #ff5c01;
+  --color-yellow: #ffd25f;
+  --color-grey: rgba(255, 255, 255, 0.5);
+}
+.App {
+  height: 100vh;
+  padding: 0 40px;
+  background: var(--color-black);
+}
