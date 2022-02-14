@@ -7,8 +7,54 @@
   --color-yellow: #ffd25f;
   --color-grey: rgba(255, 255, 255, 0.5);
 }
-.App {
-  height: 100vh;
-  padding: 0 40px;
-  background: var(--color-black);
+.page {
+  &-container {
+    height: 100vh;
+    background: var(--color-black);
+    color: var(--color-white);
+    overflow: hidden;
+
+    &__left {
+      bottom: 0;
+      background: var(--color-light-black);
+    }
+
+    &__center {
+      padding: 54px 130px 87px;
+    }
+
+    @media only screen and (max-width: 1339px) {
+      display: grid;
+      grid-auto-flow: dense;
+      grid-template-columns: 80px auto;
+
+      &__right {
+        display: none;
+      }
+
+      &__left {
+        position: relative;
+        background: var(--color-light-black);
+      }
+    }
+
+    @media only screen and (min-width: 1440px) {
+      display: grid;
+      grid-auto-flow: dense;
+      grid-template-columns: 80px auto 375px;
+    }
+
+    @media only screen and (max-width: 767px) {
+      display: inherit;
+
+      &__center {
+        padding: 70px 20px 0;
+        height: calc(100% - 70px - 66px);
+      }
+
+      &__left {
+        position: fixed;
+      }
+    }
+  }
 }

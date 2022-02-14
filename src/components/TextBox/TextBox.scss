@@ -2,10 +2,12 @@
   border: 3px solid var(--color-grey);
   border-radius: 6px;
   font-size: 14px;
-  padding: 20px 18px;
+  height: 60px;
   width: 100%;
+  padding: 0 18px;
   background: transparent;
   color: var(--color-white);
+  box-sizing: border-box;
 
   &::placeholder {
     color: var(--color-white);
