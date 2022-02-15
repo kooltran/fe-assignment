@@ -35,13 +35,14 @@ const CustomSlider = styled(Slider)(() => ({
   },
 }))
 
-const VolumnSlider = ({ marks, step, defaultValue }) => {
+const VolumnSlider = ({ marks, step, defaultValue, handleChange }) => {
   return (
     <CustomSlider
       aria-label="Custom marks"
       defaultValue={defaultValue}
       step={step}
       marks={marks}
+      onChange={handleChange}
     />
   )
 }

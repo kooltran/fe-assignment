@@ -3,10 +3,12 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 
 import { HomePage } from './pages/Home'
 import { TagsPage } from './pages/Tags'
+import { ResultPage } from './pages/Result'
+import { Follow } from './pages/Follow'
 
 import './styles.scss'
 
-import { Button, TextBox, Slider, Nav } from './components'
+import { Nav } from './components'
 
 function App() {
   return (
@@ -19,9 +21,12 @@ function App() {
           <Routes>
             <Route exact path="/" element={<HomePage />} />
             <Route path="/tags" element={<TagsPage />} />
+            <Route path="/result" element={<ResultPage />} />
           </Routes>
         </div>
-        <div className="page-container__right">Follower</div>
+        <div className="page-container__right">
+          <Follow />
+        </div>
       </Router>
     </div>
   )

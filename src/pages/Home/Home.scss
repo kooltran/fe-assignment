@@ -29,4 +29,20 @@
       width: 50%;
     }
   }
+
+  @media only screen and (max-width: 767px) {
+    &-search {
+      margin-bottom: 80px;
+      border-bottom: 0.5px solid var(--color-grey);
+
+      &__slider {
+        border-top: 0;
+        border-bottom: 0;
+      }
+
+      &__button {
+        margin-bottom: 24px;
+      }
+    }
+  }
 }

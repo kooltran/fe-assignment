@@ -32,8 +32,18 @@
   }
 
   &-item {
-    margin-bottom: 18px;
+    margin-bottom: 25px;
     font-size: 12px;
+
+    span {
+      display: none;
+    }
+
+    &.active {
+      span {
+        display: block;
+      }
+    }
 
     &:last-child {
       margin-bottom: 0;

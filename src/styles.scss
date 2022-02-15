@@ -6,6 +6,7 @@
   --color-dark-orange: #ff5c01;
   --color-yellow: #ffd25f;
   --color-grey: rgba(255, 255, 255, 0.5);
+  --color-light-grey: #b2b2b2;
 }
 .page {
   &-container {
@@ -21,9 +22,15 @@
 
     &__center {
       padding: 54px 130px 87px;
+      overflow-y: auto;
     }
 
-    @media only screen and (max-width: 1339px) {
+    &__right {
+      background: var(--color-light-black);
+      overflow-y: auto;
+    }
+
+    @media only screen and (max-width: 1439px) {
       display: grid;
       grid-auto-flow: dense;
       grid-template-columns: 80px auto;
@@ -57,4 +64,23 @@
       }
     }
   }
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--color-light-black);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--color-grey);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-light-grey);
 }
