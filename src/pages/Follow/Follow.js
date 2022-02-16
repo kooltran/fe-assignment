@@ -11,7 +11,9 @@ import {
   getFollowingFail,
 } from '../../actions/followAction'
 
-import { Button } from '../../components'
+import { Button, Skeleton } from '../../components'
+
+import { InfiniteList } from '../../components'
 
 import { useAppContext } from '../../AppContext'
 import AvatarPlaceHolder from '../../assets/images/avatar_placeholder.png'
@@ -20,6 +22,7 @@ import './Follow.scss'
 
 const Follow = () => {
   const [activeTab, setTabActive] = useState('followers')
+  const [state, setState] = useState([])
 
   const {
     data: {
@@ -52,15 +55,15 @@ const Follow = () => {
     setTabActive(tabName)
   }
 
-  useEffect(() => {
-    if (activeTab === 'followers' && !followers.data) {
-      handleGetFollowers()
-    }
+  // useEffect(() => {
+  //   if (activeTab === 'followers' && !followers.data) {
+  //     handleGetFollowers()
+  //   }
 
-    if (activeTab === 'following' && !following.data) {
-      handleGetFollowing()
-    }
-  }, [activeTab])
+  //   if (activeTab === 'following' && !following.data) {
+  //     handleGetFollowing()
+  //   }
+  // }, [activeTab])
 
   return (
     <div className="follow">
@@ -88,43 +91,52 @@ const Follow = () => {
         </div>
       </div>
       <div className="follow-panel">
-        {activeTab === 'followers' && (
+        <InfiniteList scrollable={true} state={state} setState={setState} />
+        {/* {activeTab === 'followers' && (
           <div className="follow-list">
-            {followers?.data?.map(item => (
-              <div key={item.id} className="follow-list__item">
-                <div className="follow-image">
-                  <img src={AvatarPlaceHolder} alt="" />
-                </div>
-                <div className="follow-desc">
-                  <div className="name">{item.name}</div>
-                  <div className="username">{item.username}</div>
-                </div>
-                <div className="follow-button">
-                  <Button variant="outlined">Follow</Button>
-                </div>
-              </div>
-            ))}
+            <Skeleton type="list">
+              {followers?.data?.length > 0
+                ? followers?.data?.map(item => (
+                    <div key={item.id} className="follow-list__item">
+                      <div className="follow-image">
+                        <img src={AvatarPlaceHolder} alt="" />
+                      </div>
+                      <div className="follow-desc">
+                        <div className="name">{item.name}</div>
+                        <div className="username">{item.username}</div>
+                      </div>
+                      <div className="follow-button">
+                        <Button variant="outlined">Follow</Button>
+                      </div>
+                    </div>
+                  ))
+                : null}
+            </Skeleton>
           </div>
         )}
 
         {activeTab === 'following' && (
           <div className="follow-list">
-            {following?.data?.map(item => (
-              <div key={item.id} className="follow-list__item">
-                <div className="follow-image">
-                  <img src={AvatarPlaceHolder} alt="" />
-                </div>
-                <div className="follow-desc">
-                  <div className="name">{item.name}</div>
-                  <div className="username">{item.username}</div>
-                </div>
-                <div className="follow-button">
-                  <Button variant="contained">Following</Button>
-                </div>
-              </div>
-            ))}
+            <Skeleton type="list">
+              {following?.data?.length > 0
+                ? following.data.map(item => (
+                    <div key={item.id} className="follow-list__item">
+                      <div className="follow-image">
+                        <img src={AvatarPlaceHolder} alt="" />
+                      </div>
+                      <div className="follow-desc">
+                        <div className="name">{item.name}</div>
+                        <div className="username">{item.username}</div>
+                      </div>
+                      <div className="follow-button">
+                        <Button variant="contained">Following</Button>
+                      </div>
+                    </div>
+                  ))
+                : null}
+            </Skeleton>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   )
