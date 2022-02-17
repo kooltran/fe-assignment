@@ -5,6 +5,7 @@
   position: relative;
   overflow: hidden;
 
+  &.has-effect,
   .has-effect {
     background-color: #50535a;
     background-image: linear-gradient(
@@ -23,17 +24,15 @@
     height: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    padding: 1rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
 
     .cui-shell {
-      width: 100px;
-      height: 45px;
+      width: 150px;
+      height: 150px;
       border-radius: 10px;
-
-      & + .cui-shell {
-        margin-left: 1rem;
-      }
+      margin-right: 1rem;
+      margin-bottom: 1rem;
     }
   }
 

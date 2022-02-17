@@ -1,17 +1,20 @@
 import React, { useEffect } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
-import { Button } from '../../components'
+import { Button, InfiniteList, IconArrowLeft } from '../../components'
 
 import useSearch from './useSearch'
 import { useAppContext } from '../../AppContext'
 import PlaceHolderImage from '../../assets/images/place_holder.png'
+
+import { getSearchSuccess } from '../../actions/searchAction'
 
 import './Result.scss'
 
 const ResultPage = () => {
   const {
     data: { search: searchData },
+    dispatch,
   } = useAppContext()
 
   const getSearchResult = useSearch()
@@ -24,7 +27,6 @@ const ResultPage = () => {
   const keyword = searchParams.get('keyword')
 
   const totalPages = searchData?.data?.total
-
   useEffect(async () => {
     if (page && pageSize && keyword) {
       if (!searchData.data) {
@@ -37,15 +39,15 @@ const ResultPage = () => {
 
   const handleLoadMore = async () => {
     getSearchResult({
-      page: parseInt(searchData.data.page) + 1,
+      page: parseInt(searchData?.data?.page) + 1,
       pageSize,
       keyword,
       isLoadMore: true,
     })
   }
 
-  return (
-    <div className="result-wrapper">
+  const resultListResolver = () => {
+    return (
       <div className="result-list">
         {searchData?.data?.data?.map(item => {
           return (
@@ -61,7 +63,33 @@ const ResultPage = () => {
           )
         })}
       </div>
-      {searchData?.data?.data.length < totalPages && (
+    )
+  }
+
+  const handleBackHome = () => {
+    dispatch(getSearchSuccess(null))
+    navigate('/')
+  }
+
+  return (
+    <div className="result-wrapper">
+      <div className="back" onClick={handleBackHome}>
+        <IconArrowLeft />
+        <span>Home page</span>
+      </div>
+      <div className="result-title">Result</div>
+      <div className="result-content">
+        <InfiniteList
+          listContentResolver={resultListResolver}
+          getData={handleLoadMore}
+          extraHeightAmount={195}
+          isStopLoadMore={
+            searchData?.data?.data?.length &&
+            searchData?.data?.data?.length === searchData?.data?.total
+          }
+        />
+      </div>
+      {searchData?.data?.data?.length < totalPages && (
         <div className="result-more">
           <Button onClick={handleLoadMore}>More</Button>
         </div>

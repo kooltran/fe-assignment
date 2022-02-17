@@ -6,7 +6,7 @@ export const tagsReducer = (state, action) => {
       return {
         ...state,
         loading: true,
-        data: null,
+        data: state.data,
         fail: null,
       }
     case GET_TAGS_SUCCESS:

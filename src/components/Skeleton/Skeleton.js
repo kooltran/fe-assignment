@@ -8,25 +8,32 @@ const isChildNull = children => {
   return !children && !ReactDOMServer.renderToStaticMarkup(children)
 }
 
-const SkeletonAnimation = ({ type, height }) => {
-  const skeletonItems = height
+const SkeletonAnimation = ({ type, height, width }) => {
+  const skeletonListItems = height
     ? Array.from(Array(Math.round(height / 71)).keys())
     : []
+
+  const skeletonBoxItems =
+    !!height && !!width
+      ? Array.from(
+          Array(Math.round(width / 200) * Math.round(height / 200)).keys()
+        )
+      : []
 
   switch (type) {
     case 'boxes': {
       return (
         <div className="cui-shell__boxes">
-          <div className="cui-shell" />
-          <div className="cui-shell" />
-          <div className="cui-shell" />
+          {skeletonBoxItems.map(item => (
+            <div key={item} className="cui-shell has-effect" />
+          ))}
         </div>
       )
     }
     case 'list': {
       return (
         <div className="cui-shell__list">
-          {skeletonItems.map(item => (
+          {skeletonListItems.map(item => (
             <div key={item} className="cui-shell">
               <div className="cui-shell__image has-effect"></div>
               <div className="cui-shell__desc">
@@ -45,7 +52,7 @@ const SkeletonAnimation = ({ type, height }) => {
 }
 
 SkeletonAnimation.propTypes = {
-  type: 'tabs',
+  type: PropTypes.string,
 }
 
 const Skeleton = ({ children, type }) => {
@@ -64,6 +71,7 @@ const Skeleton = ({ children, type }) => {
           {' '}
           <SkeletonAnimation
             height={skeletonRef?.current?.offsetHeight}
+            width={skeletonRef?.current?.offsetWidth}
             type={type}
           />{' '}
         </div>

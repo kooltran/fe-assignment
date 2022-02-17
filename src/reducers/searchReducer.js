@@ -10,7 +10,7 @@ export const searchReducer = (state, action) => {
       return {
         ...state,
         loading: true,
-        data: null,
+        data: state.data,
         fail: null,
       }
     case GET_SEARCH_SUCCESS:

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
   getTagsRequest,
@@ -9,14 +9,20 @@ import getTags from '../../api/tagsAPI'
 
 import { useAppContext } from '../../AppContext'
 
+import { Skeleton } from '../../components'
+
 import './Tags.scss'
+
+const truncate = (str, n) => {
+  return str.length > n ? str.substr(0, n - 1) + '...' : str
+}
 
 const Tags = () => {
   const {
     data: { tags },
     dispatch,
   } = useAppContext()
-
+  console.log(tags, 'tags')
   const handleGetTags = async () => {
     dispatch(getTagsRequest())
     try {
@@ -35,17 +41,21 @@ const Tags = () => {
     <div className="tags">
       <div className="tags-title">Tags</div>
       <div className="tags-list">
-        {tags?.data?.map(tag => (
-          <div key={tag.id} className="tags-item">
-            <div className="content">
-              <p>{tag.name}</p>
-            </div>
-            <div className="desc">
-              <div className="name">{tag.name}</div>
-              <div className="count">{tag.count}</div>
-            </div>
-          </div>
-        ))}
+        <Skeleton type="boxes">
+          {tags?.data?.length > 0
+            ? tags?.data?.map(tag => (
+                <div key={tag.id} className="tags-item">
+                  <div className="content">
+                    <p>{truncate(tag.name, 6)}</p>
+                  </div>
+                  <div className="desc">
+                    <div className="name">{tag.name}</div>
+                    <div className="count">{tag.count}</div>
+                  </div>
+                </div>
+              ))
+            : null}
+        </Skeleton>
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import classNames from 'classnames'
 
 import { getFollowers, getFollowing } from '../../api/followAPI'
@@ -11,18 +11,22 @@ import {
   getFollowingFail,
 } from '../../actions/followAction'
 
-import { Button, Skeleton } from '../../components'
-
-import { InfiniteList } from '../../components'
-
 import { useAppContext } from '../../AppContext'
+
+import { Button, Skeleton, InfiniteList } from '../../components'
+
 import AvatarPlaceHolder from '../../assets/images/avatar_placeholder.png'
 
 import './Follow.scss'
 
 const Follow = () => {
   const [activeTab, setTabActive] = useState('followers')
-  const [state, setState] = useState([])
+
+  const [currentFollowersPage, setFollowersPage] = useState(1)
+  const [currentFollowingPage, setFollowingPage] = useState(1)
+
+  const [isStopLoadMoreFollwers, setStopLoadMoreFollowers] = useState(false)
+  const [isStopLoadMoreFollwing, setStopLoadMoreFollowing] = useState(false)
 
   const {
     data: {
@@ -34,8 +38,22 @@ const Follow = () => {
   const handleGetFollowers = async () => {
     dispatch(getFollowersRequest())
     try {
-      const res = await getFollowers({ page: 1, pageSize: 20 })
-      dispatch(getFollowersSuccess(res.data))
+      const res = await getFollowers({
+        page: currentFollowersPage,
+        pageSize: 20,
+      })
+
+      dispatch(
+        getFollowersSuccess(
+          followers?.data ? [...followers?.data, ...res.data] : res.data
+        )
+      )
+
+      setFollowersPage(currentFollowersPage + 1)
+
+      if (followers?.data?.length + 20 === res.total) {
+        setStopLoadMoreFollowers(true)
+      }
     } catch (err) {
       dispatch(getFollowersFail(err))
     }
@@ -44,8 +62,22 @@ const Follow = () => {
   const handleGetFollowing = async () => {
     dispatch(getFollowingRequest())
     try {
-      const res = await getFollowing({ page: 1, pageSize: 20 })
-      dispatch(getFollowingSuccess(res.data))
+      const res = await getFollowing({
+        page: currentFollowingPage,
+        pageSize: 20,
+      })
+
+      dispatch(
+        getFollowingSuccess(
+          following?.data ? [...following?.data, ...res.data] : res.data
+        )
+      )
+
+      setFollowingPage(currentFollowingPage + 1)
+
+      if (following?.data?.length + 20 === res.total) {
+        setStopLoadMoreFollowing(true)
+      }
     } catch (err) {
       dispatch(getFollowingFail(err))
     }
@@ -55,15 +87,55 @@ const Follow = () => {
     setTabActive(tabName)
   }
 
-  // useEffect(() => {
-  //   if (activeTab === 'followers' && !followers.data) {
-  //     handleGetFollowers()
-  //   }
+  const followersListContentResolver = () => {
+    return (
+      <div className="follow-list">
+        <Skeleton type="list">
+          {followers?.data?.length > 0
+            ? followers.data.map(item => (
+                <div key={item.id} className="follow-list__item">
+                  <div className="follow-image">
+                    <img src={AvatarPlaceHolder} alt="" />
+                  </div>
+                  <div className="follow-desc">
+                    <div className="name">{item.name}</div>
+                    <div className="username">{item.username}</div>
+                  </div>
+                  <div className="follow-button">
+                    <Button variant="outlined">Follow</Button>
+                  </div>
+                </div>
+              ))
+            : null}
+        </Skeleton>
+      </div>
+    )
+  }
 
-  //   if (activeTab === 'following' && !following.data) {
-  //     handleGetFollowing()
-  //   }
-  // }, [activeTab])
+  const followingListContentResolver = () => {
+    return (
+      <div className="follow-list">
+        <Skeleton type="list">
+          {following?.data?.length
+            ? following.data.map(item => (
+                <div key={item.id} className="follow-list__item">
+                  <div className="follow-image">
+                    <img src={AvatarPlaceHolder} alt="" />
+                  </div>
+                  <div className="follow-desc">
+                    <div className="name">{item.name}</div>
+                    <div className="username">{item.username}</div>
+                  </div>
+                  <div className="follow-button">
+                    <Button variant="contained">Following</Button>
+                  </div>
+                </div>
+              ))
+            : null}
+        </Skeleton>
+      </div>
+    )
+  }
 
   return (
     <div className="follow">
@@ -91,52 +163,22 @@ const Follow = () => {
         </div>
       </div>
       <div className="follow-panel">
-        <InfiniteList scrollable={true} state={state} setState={setState} />
-        {/* {activeTab === 'followers' && (
-          <div className="follow-list">
-            <Skeleton type="list">
-              {followers?.data?.length > 0
-                ? followers?.data?.map(item => (
-                    <div key={item.id} className="follow-list__item">
-                      <div className="follow-image">
-                        <img src={AvatarPlaceHolder} alt="" />
-                      </div>
-                      <div className="follow-desc">
-                        <div className="name">{item.name}</div>
-                        <div className="username">{item.username}</div>
-                      </div>
-                      <div className="follow-button">
-                        <Button variant="outlined">Follow</Button>
-                      </div>
-                    </div>
-                  ))
-                : null}
-            </Skeleton>
-          </div>
+        {activeTab === 'followers' && (
+          <InfiniteList
+            getData={handleGetFollowers}
+            isStopLoadMore={isStopLoadMoreFollwers}
+            listContentResolver={followersListContentResolver}
+            extraHeightAmount={135}
+          />
         )}
-
         {activeTab === 'following' && (
-          <div className="follow-list">
-            <Skeleton type="list">
-              {following?.data?.length > 0
-                ? following.data.map(item => (
-                    <div key={item.id} className="follow-list__item">
-                      <div className="follow-image">
-                        <img src={AvatarPlaceHolder} alt="" />
-                      </div>
-                      <div className="follow-desc">
-                        <div className="name">{item.name}</div>
-                        <div className="username">{item.username}</div>
-                      </div>
-                      <div className="follow-button">
-                        <Button variant="contained">Following</Button>
-                      </div>
-                    </div>
-                  ))
-                : null}
-            </Skeleton>
-          </div>
-        )} */}
+          <InfiniteList
+            getData={handleGetFollowing}
+            isStopLoadMore={isStopLoadMoreFollwing}
+            listContentResolver={followingListContentResolver}
+            extraHeightAmount={135}
+          />
+        )}
       </div>
     </div>
   )

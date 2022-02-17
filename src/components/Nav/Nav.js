@@ -2,18 +2,21 @@ import React from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import classNames from 'classnames'
 
-import { NavIcon } from '../../components'
+import { NavIcon, useWindowSize } from '../../components'
 
 import './Nav.scss'
 
 const Nav = () => {
   const { pathname } = useLocation()
+  const size = useWindowSize()
 
   return (
     <div className="nav">
-      <div className="nav-logo">
-        <Link to="/">Logo</Link>
-      </div>
+      {((pathname !== '/' && size.width > 768) || pathname === '/') && (
+        <div className="nav-logo">
+          <Link to="/">Logo</Link>
+        </div>
+      )}
       <div className="nav-container">
         <div
           className={classNames('nav-item', {

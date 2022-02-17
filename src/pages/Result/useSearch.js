@@ -21,28 +21,29 @@ const useSearch = () => {
     pageSize,
     keyword,
     isRedirect = false,
-    isLoadMore = false,
   }) => {
-    if (!isLoadMore) {
-      dispatch(getSearchRequest())
-    }
+    // if (!isLoadMore) {
+    // }
+    dispatch(getSearchRequest())
     try {
       const res = await getSearch({
         page: page,
         pageSize: pageSize,
         searchKey: keyword,
       })
-      if (isLoadMore) {
-        dispatch(
-          getSearchSuccess({
-            ...searchData?.data,
-            ...res,
-            data: [...searchData?.data?.data, ...res?.data],
-          })
+
+      dispatch(
+        getSearchSuccess(
+          searchData?.data
+            ? {
+                ...searchData?.data,
+                ...res,
+                data: [...searchData?.data?.data, ...res?.data],
+              }
+            : res
         )
-      } else {
-        dispatch(getSearchSuccess(res))
-      }
+      )
+
       if (isRedirect) {
         if (res.data.length > 0) {
           navigate(

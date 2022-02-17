@@ -20,10 +20,9 @@
       background: var(--color-light-black);
     }
 
-    &__center {
-      padding: 54px 130px 87px;
-      overflow-y: auto;
-    }
+    // &__center {
+    //   padding: 54px 130px 87px;
+    // }
 
     &__right {
       background: var(--color-light-black);
@@ -48,6 +47,12 @@
       display: grid;
       grid-auto-flow: dense;
       grid-template-columns: 80px auto 375px;
+    }
+
+    @media only screen and (max-width: 1024px) {
+      &__center {
+        padding: 54px 60px 87px;
+      }
     }
 
     @media only screen and (max-width: 767px) {

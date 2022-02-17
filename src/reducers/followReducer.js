@@ -15,7 +15,7 @@ export const followReducer = (state, action) => {
         followers: {
           ...state.followers,
           loading: true,
-          data: null,
+          data: state.followers.data,
           fail: null,
         },
       }
@@ -46,7 +46,7 @@ export const followReducer = (state, action) => {
         following: {
           ...state.following,
           loading: true,
-          data: null,
+          data: state.following.data,
           fail: null,
         },
       }
