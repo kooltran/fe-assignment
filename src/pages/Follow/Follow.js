@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import classNames from 'classnames'
 
 import { getFollowers, getFollowing } from '../../api/followAPI'
@@ -13,13 +13,15 @@ import {
 
 import { useAppContext } from '../../AppContext'
 
-import { Button, Skeleton, InfiniteList } from '../../components'
+import { Button, Skeleton, InfiniteList, useWindowSize } from '../../components'
 
 import AvatarPlaceHolder from '../../assets/images/avatar_placeholder.png'
+import LoadingIcon from '../../assets/images/icons/loading.svg'
 
 import './Follow.scss'
 
 const Follow = () => {
+  const size = useWindowSize()
   const [activeTab, setTabActive] = useState('followers')
 
   const [currentFollowersPage, setFollowersPage] = useState(1)
@@ -34,6 +36,18 @@ const Follow = () => {
     },
     dispatch,
   } = useAppContext()
+
+  useEffect(() => {
+    if (size.width >= 1440) {
+      if (!followers?.data && activeTab === 'followers') {
+        handleGetFollowers()
+      }
+
+      if (!following.data && activeTab === 'following') {
+        handleGetFollowing()
+      }
+    }
+  }, [size, activeTab])
 
   const handleGetFollowers = async () => {
     dispatch(getFollowersRequest())
@@ -75,7 +89,7 @@ const Follow = () => {
 
       setFollowingPage(currentFollowingPage + 1)
 
-      if (following?.data?.length + 20 === res.total) {
+      if (following?.data?.length + 20 >= res.total) {
         setStopLoadMoreFollowing(true)
       }
     } catch (err) {
@@ -138,49 +152,66 @@ const Follow = () => {
   }
 
   return (
-    <div className="follow">
-      <div
-        className={classNames('follow-tab', {
-          left: activeTab === 'followers',
-          right: activeTab === 'following',
-        })}
-      >
+    size.width >= 1440 && (
+      <div className="follow">
         <div
-          className={classNames('follow-tab__item', {
-            active: activeTab === 'followers',
+          className={classNames('follow-tab', {
+            left: activeTab === 'followers',
+            right: activeTab === 'following',
           })}
-          onClick={() => handleActiveTab('followers')}
         >
-          Followers
+          <div
+            className={classNames('follow-tab__item', {
+              active: activeTab === 'followers',
+            })}
+            onClick={() => handleActiveTab('followers')}
+          >
+            Followers
+          </div>
+          <div
+            className={classNames('follow-tab__item', {
+              active: activeTab === 'following',
+            })}
+            onClick={() => handleActiveTab('following')}
+          >
+            Following
+          </div>
         </div>
-        <div
-          className={classNames('follow-tab__item', {
-            active: activeTab === 'following',
-          })}
-          onClick={() => handleActiveTab('following')}
-        >
-          Following
+        <div className="follow-panel">
+          {activeTab === 'followers' && (
+            <InfiniteList
+              getData={handleGetFollowers}
+              isStopLoadMore={isStopLoadMoreFollwers}
+              listContentResolver={followersListContentResolver}
+              extraHeightAmount={135}
+            />
+          )}
+          {activeTab === 'following' && (
+            <InfiniteList
+              getData={handleGetFollowing}
+              isStopLoadMore={isStopLoadMoreFollwing}
+              listContentResolver={followingListContentResolver}
+              extraHeightAmount={135}
+            />
+          )}
+          {(followers.loading || following.loading) && (
+            <div
+              style={{
+                width: '50px',
+                color: 'white',
+                margin: '0 auto',
+                marginTop: '-35px',
+              }}
+            >
+              <img
+                style={{ width: '100%', height: '100%' }}
+                src={LoadingIcon}
+              />
+            </div>
+          )}
         </div>
       </div>
-      <div className="follow-panel">
-        {activeTab === 'followers' && (
-          <InfiniteList
-            getData={handleGetFollowers}
-            isStopLoadMore={isStopLoadMoreFollwers}
-            listContentResolver={followersListContentResolver}
-            extraHeightAmount={135}
-          />
-        )}
-        {activeTab === 'following' && (
-          <InfiniteList
-            getData={handleGetFollowing}
-            isStopLoadMore={isStopLoadMoreFollwing}
-            listContentResolver={followingListContentResolver}
-            extraHeightAmount={135}
-          />
-        )}
-      </div>
-    </div>
+    )
   )
 }
 

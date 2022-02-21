@@ -7,7 +7,7 @@ const InfiniteList = ({
   extraHeightAmount,
 }) => {
   const listRef = useRef(null)
-  const [loadMore, setLoadMore] = useState(true)
+  const [loadMore, setLoadMore] = useState(false)
 
   const handleScroll = e => {
     const scrollTop = e.target.scrollTop

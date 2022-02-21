@@ -6,6 +6,7 @@ import { Button, InfiniteList, IconArrowLeft } from '../../components'
 import useSearch from './useSearch'
 import { useAppContext } from '../../AppContext'
 import PlaceHolderImage from '../../assets/images/place_holder.png'
+import LoadingIcon from '../../assets/images/icons/loading.svg'
 
 import { getSearchSuccess } from '../../actions/searchAction'
 
@@ -39,7 +40,7 @@ const ResultPage = () => {
 
   const handleLoadMore = async () => {
     getSearchResult({
-      page: parseInt(searchData?.data?.page) + 1,
+      page: searchData?.data?.page ? parseInt(searchData?.data?.page) + 1 : 1,
       pageSize,
       keyword,
       isLoadMore: true,
@@ -87,7 +88,20 @@ const ResultPage = () => {
             searchData?.data?.data?.length &&
             searchData?.data?.data?.length === searchData?.data?.total
           }
+          loading={searchData.loading}
         />
+        {searchData.loading && (
+          <div
+            style={{
+              width: '50px',
+              color: 'white',
+              margin: '0 auto',
+              marginTop: '-35px',
+            }}
+          >
+            <img style={{ width: '100%', height: '100%' }} src={LoadingIcon} />
+          </div>
+        )}
       </div>
       {searchData?.data?.data?.length < totalPages && (
         <div className="result-more">

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import {
   getTagsRequest,
@@ -9,7 +10,7 @@ import getTags from '../../api/tagsAPI'
 
 import { useAppContext } from '../../AppContext'
 
-import { Skeleton } from '../../components'
+import { Skeleton, IconArrowLeft } from '../../components'
 
 import './Tags.scss'
 
@@ -22,7 +23,9 @@ const Tags = () => {
     data: { tags },
     dispatch,
   } = useAppContext()
-  console.log(tags, 'tags')
+
+  let navigate = useNavigate()
+
   const handleGetTags = async () => {
     dispatch(getTagsRequest())
     try {
@@ -33,12 +36,20 @@ const Tags = () => {
     }
   }
 
+  const handleBackHome = () => {
+    navigate('/')
+  }
+
   useEffect(() => {
     handleGetTags()
   }, [])
 
   return (
     <div className="tags">
+      <div className="back" onClick={handleBackHome}>
+        <IconArrowLeft />
+        <span>Home page</span>
+      </div>
       <div className="tags-title">Tags</div>
       <div className="tags-list">
         <Skeleton type="boxes">

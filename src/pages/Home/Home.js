@@ -71,6 +71,10 @@ const Home = () => {
         />
         <div className="home-search__slider">
           <div className="title"># of result per page</div>
+          <div className="status">
+            <span>{searchItems}</span>
+            results
+          </div>
           <Slider
             marks={sliderMarks}
             step={null}

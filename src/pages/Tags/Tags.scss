@@ -1,4 +1,19 @@
 .tags {
+  height: 100%;
+  position: relative;
+
+  .back {
+    position: absolute;
+    top: 8px;
+    left: -25px;
+    cursor: pointer;
+
+    span {
+      display: none;
+      font-size: 24px;
+    }
+  }
+
   &-list {
     display: grid;
     grid-gap: 24px;
@@ -54,5 +69,23 @@
   &-title {
     font-size: 30px;
     margin-bottom: 24px;
+  }
+
+  @media only screen and (max-width: 767px) {
+    .back {
+      display: flex;
+      align-items: center;
+      top: -55px;
+      left: 0;
+
+      span {
+        display: block;
+        margin-left: 18px;
+      }
+    }
+
+    &-list {
+      height: calc(100vh - 220px);
+    }
   }
 }

@@ -22,8 +22,6 @@ const useSearch = () => {
     keyword,
     isRedirect = false,
   }) => {
-    // if (!isLoadMore) {
-    // }
     dispatch(getSearchRequest())
     try {
       const res = await getSearch({
@@ -34,7 +32,9 @@ const useSearch = () => {
 
       dispatch(
         getSearchSuccess(
-          searchData?.data
+          isRedirect
+            ? null
+            : searchData?.data
             ? {
                 ...searchData?.data,
                 ...res,
