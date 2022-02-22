@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
-import { Button, InfiniteList, IconArrowLeft } from '../../components'
+import { Button, InfiniteList, IconArrowLeft, Skeleton } from '../../components'
 
 import useSearch from './useSearch'
 import { useAppContext } from '../../AppContext'
@@ -28,7 +28,8 @@ const ResultPage = () => {
   const keyword = searchParams.get('keyword')
 
   const totalPages = searchData?.data?.total
-  useEffect(async () => {
+
+  useEffect(() => {
     if (page && pageSize && keyword) {
       if (!searchData.data) {
         getSearchResult({ page, pageSize, keyword })
@@ -50,19 +51,23 @@ const ResultPage = () => {
   const resultListResolver = () => {
     return (
       <div className="result-list">
-        {searchData?.data?.data?.map(item => {
-          return (
-            <div key={item.id} className="result-item">
-              <img
-                src={PlaceHolderImage}
-                alt={item.username}
-                className="result-item__image"
-              />
-              <div className="result-item__title">This is title</div>
-              <div className="result-item__username">{`by ${item.name}`}</div>
-            </div>
-          )
-        })}
+        <Skeleton type="boxes">
+          {searchData?.data?.data.length > 0
+            ? searchData?.data?.data?.map(item => {
+                return (
+                  <div key={item.id} className="result-item">
+                    <img
+                      src={PlaceHolderImage}
+                      alt={item.username}
+                      className="result-item__image"
+                    />
+                    <div className="result-item__title">This is title</div>
+                    <div className="result-item__username">{`by ${item.name}`}</div>
+                  </div>
+                )
+              })
+            : null}
+        </Skeleton>
       </div>
     )
   }
@@ -99,7 +104,11 @@ const ResultPage = () => {
               marginTop: '-35px',
             }}
           >
-            <img style={{ width: '100%', height: '100%' }} src={LoadingIcon} />
+            <img
+              style={{ width: '100%', height: '100%' }}
+              src={LoadingIcon}
+              alt="loading-icon"
+            />
           </div>
         )}
       </div>

@@ -109,7 +109,7 @@ const Follow = () => {
             ? followers.data.map(item => (
                 <div key={item.id} className="follow-list__item">
                   <div className="follow-image">
-                    <img src={AvatarPlaceHolder} alt="" />
+                    <img src={AvatarPlaceHolder} alt="avatar" />
                   </div>
                   <div className="follow-desc">
                     <div className="name">{item.name}</div>
@@ -134,7 +134,7 @@ const Follow = () => {
             ? following.data.map(item => (
                 <div key={item.id} className="follow-list__item">
                   <div className="follow-image">
-                    <img src={AvatarPlaceHolder} alt="" />
+                    <img src={AvatarPlaceHolder} alt="avatar" />
                   </div>
                   <div className="follow-desc">
                     <div className="name">{item.name}</div>
@@ -206,6 +206,7 @@ const Follow = () => {
               <img
                 style={{ width: '100%', height: '100%' }}
                 src={LoadingIcon}
+                alt="loading-icon"
               />
             </div>
           )}
