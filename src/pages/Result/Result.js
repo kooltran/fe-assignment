@@ -88,7 +88,6 @@ const ResultPage = () => {
         <InfiniteList
           listContentResolver={resultListResolver}
           getData={handleLoadMore}
-          extraHeightAmount={195}
           isStopLoadMore={
             searchData?.data?.data?.length &&
             searchData?.data?.data?.length === searchData?.data?.total

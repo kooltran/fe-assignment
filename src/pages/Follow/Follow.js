@@ -183,7 +183,6 @@ const Follow = () => {
               getData={handleGetFollowers}
               isStopLoadMore={isStopLoadMoreFollwers}
               listContentResolver={followersListContentResolver}
-              extraHeightAmount={135}
             />
           )}
           {activeTab === 'following' && (
@@ -191,7 +190,6 @@ const Follow = () => {
               getData={handleGetFollowing}
               isStopLoadMore={isStopLoadMoreFollwing}
               listContentResolver={followingListContentResolver}
-              extraHeightAmount={135}
             />
           )}
           {(followers.loading || following.loading) && (

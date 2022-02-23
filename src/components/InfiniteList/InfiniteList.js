@@ -1,20 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react'
 
-const InfiniteList = ({
-  getData,
-  isStopLoadMore,
-  listContentResolver,
-  extraHeightAmount,
-}) => {
+const InfiniteList = ({ getData, isStopLoadMore, listContentResolver }) => {
   const listRef = useRef(null)
   const [loadMore, setLoadMore] = useState(false)
 
   const handleScroll = e => {
     const scrollTop = e.target.scrollTop
     const scrollHeight = e.target.scrollHeight
-    const windowInnerHeight = window.innerHeight
+    const listHeight = listRef.current.clientHeight
 
-    if (scrollTop + windowInnerHeight - extraHeightAmount >= scrollHeight) {
+    if (scrollTop + listHeight >= scrollHeight) {
       setLoadMore(true)
     }
   }
